@@ -69,7 +69,6 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        REPOSITORY_URI: ${{ secrets.REPOSITORY_URI }}
       id: plan
       run: |
         export REPOSITORY_URI=$REPOSITORY_URI
@@ -80,6 +79,5 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        REPOSITORY_URI: ${{ secrets.REPOSITORY_URI }}
       run: terraform apply -input=false -auto-approve
       working-directory: terraform
