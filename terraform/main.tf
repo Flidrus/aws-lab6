@@ -6,7 +6,7 @@ terraform {
       version = "~> 5.0"
     }
   }
-  
+
   backend "s3" {
     bucket         = "gomelskyi-lab6"
     key            = "terraform.tfstate"
@@ -15,9 +15,18 @@ terraform {
   }
 }
 
-# Configure the AWS provider
 provider "aws" {
   region = "eu-central-1"
+}
+
+variable "ssh_public_key" {
+  description = "Public SSH key for EC2 access"
+  type        = string
+}
+
+resource "aws_key_pair" "deploy_key" {
+  key_name   = "github-actions-deploy-key"
+  public_key = var.ssh_public_key
 }
 
 resource "aws_security_group" "web_app" {
@@ -54,6 +63,8 @@ resource "aws_instance" "webapp_instance" {
   ami                    = "ami-0030bb9626529d09d"
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.web_app.id]
+
+  key_name = aws_key_pair.deploy_key.key_name
 
   tags = {
     Name = "webapp_instance"
